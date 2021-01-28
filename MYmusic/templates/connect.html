@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <div class="container">
+
+    <!-- Logo -->
+    <h1 id="logo">Login</h1>
+
+  </div>
+{% endblock %}
+
+{% block content %}
+<br>
+<div class="container justify-content-center" style="max-width: 500px;">
+  <!-- Type in information -->
+    <form action="/connect" method="post">
+      <label for="UserID">User ID</label>
+      <input id="UserID" type="text" class="form-control" name="UserID" placeholder="User ID" aria-label="User ID" required>
+  
+      <label for="ClientID">Client ID</label>
+      <input id="ClientID" type="text" class="form-control" name="ClientID" placeholder="Client ID" aria-label="Client ID" required>
+
+      <label for="ClientSecret">Client Secret</label>
+      <input id="ClientSecret" type="password" class="form-control" name="ClientSecret" placeholder="Client Secret" aria-label="Client Secret" required>
+    
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+
+</div>
+
+{% endblock %}

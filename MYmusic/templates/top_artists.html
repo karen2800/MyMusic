@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<section id="header">
+  <div class="container">
+
+    <!-- Logo -->
+    <h1 id="logo">{{data.title}}</h1>
+    
+  <!-- Nav -->
+  <nav id="nav">
+    <ul>
+      <li><a class="icon solid fa-home" onclick="location.href='http:\/\/127.0.0.1:5000\/actions\/search'" type="submit"><span>Search</span></a></li>
+      <li><a class="icon solid fa-chart-bar" onclick="location.href='http:\/\/127.0.0.1:5000\/actions\/top_songs'" type="submit"><span>Top Songs</span></a></li>
+      <li><a class="icon solid fa-cog" onclick="location.href='http:\/\/127.0.0.1:5000\/actions\/top_artists'" type="submit"><span>Top Artists</span></a></li>
+      <li><a class="icon solid fa-retweet" onclick="location.href='http:\/\/127.0.0.1:5000\/actions\/recent'" type="submit"><span>Recently Played</span></a></li>
+      <li><a class="icon solid fa-sitemap" onclick="location.href='http:\/\/127.0.0.1:5000\/actions\/playlists'" type="submit"><span>Playlists</span></a></li>
+    </ul>
+  </nav>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}
+
+  <!-- Excerpts -->
+  <section>
+    <ul class="divided">
+     
+      <table>
+        <tr>
+          <th style="min-width: 210px;"><h3><strong>Artist</strong></h3></th>
+          <th><h3><strong>Popularity</strong></h3></th>
+          <th><h3><strong>Genres</strong></h3></th>
+          <th></th>
+        </tr>
+        {% for key, val in data.artists.items() %}
+        <tr>
+          <td><strong>{{val["artist"]}}</strong></td>
+          <td>{{val["popularity"]}}</td>
+          <td>{{val["genres"]}}</td>
+          <td>
+            <form action="/actions/top_artists" method="post" class="actions">
+              <input hidden id="artist_id" name="artist_id" value="{{key}}">
+              <button type="submit" value="View Songs">View Songs</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+
+    </ul>
+  </section>
+
+{% endblock %}
