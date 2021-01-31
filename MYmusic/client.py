@@ -1,6 +1,7 @@
 import requests, json, base64, ast
 from myToken import Token
 from playlist import Playlist
+from playlists import Playlists
 from songs import Songs
 from artists import Artists
 
@@ -13,31 +14,36 @@ class Client:
         self.new_playlist = Playlist()
         self.current_playlist = Playlist()
 
-    # add song(s)
-    def add_to_new_playlist(self, song):
-        self.new_playlist.add_song(song)
+    # get user playlists
+    def get_my_playlists(self):
+        url = "https://api.spotify.com/v1/me/playlists"
+        response = self.get_request(url)
+        response_json = response.json()
 
-    def add_to_current_playlist(self, song):
-        self.current_playlist.add_song(song)
+        playlists = Playlists()
+        for p in response_json["items"]:
+            playlist = Playlist(p["name"], p["id"])
+            playlists.add_playlist(p["id"], playlist)
 
-    def add_many_to_new_playlist(self, songs):
-        self.new_playlist.add_songs(songs)
+        return playlists
 
-    def add_many_to_current_playlist(self, songs):
-        self.current_playlist.add_songs(songs)
+    # get user playlist
+    def get_my_playlist_data(self, playlist_id):
+        url = f"https://api.spotify.com/v1/playlists/{playlist_id}"
+        response = self.get_request(url)
+        response_json = response.json()
 
-    # remove song(s)
-    def remove_from_new_playlist(self, id):
-        self.new_playlist.remove_song(id)
+        ids = ""
+        tracks = Songs(response_json["name"])
+        for track in response_json["tracks"]["items"]:
+            ids = ids + track["track"]["id"] + "," 
+            song = {
+                "artist" : track["track"]["artists"][0]["name"],
+                "title" : track["track"]["name"]
+            }
+            tracks.add_song(track["track"]["id"], song)
 
-    def remove_from_current_playlist(self, id):
-        self.current_playlist.remove_song(id)
-
-    def remove_many_from_new_playlist(self, ids):
-        self.new_playlist.remove_songs(ids)
-
-    def remove_many_from_current_playlist(self, ids):
-        self.current_playlist.remove_songs(ids)
+        return self.get_track_data(ids[:-1], tracks)
 
     # search for artist
     def search_for_artist(self, name):

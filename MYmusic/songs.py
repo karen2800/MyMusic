@@ -9,7 +9,7 @@ class Songs:
     def add_song(self, id, song):
         self.songs[id] = song
     def remove_song(self, id):
-        self.songs.remove(id)
+        self.songs.pop(id)
 
     def add_attributes(self, id, attributes):
         self.songs[id]["attributes"] = attributes

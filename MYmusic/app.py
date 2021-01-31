@@ -51,14 +51,8 @@ def got_code(code):
 
 # GET /actions
 # main page
-@app.route('/actions', methods=['GET'])
+@app.route('/actions', methods=['GET', 'POST'])
 def actions():
-    return render_template('index.html')
-
-# POST /actions
-@app.route('/actions', methods=['POST'])
-def actions_post():
-    name = request.form.get('name')
     return render_template('index.html')
 
 # GET /actions/search
@@ -92,7 +86,11 @@ def my_top_songs():
 @app.route('/actions/recent', methods=['GET'])
 def my_last_played_songs():
     global cli
-    data = cli.get_last_played_tracks()
+    try:
+        data = cli.get_last_played_tracks()
+    except:
+        cli.refresh_token()
+        data = cli.get_last_played_tracks()
     return render_template('songs.html', data=data)
 
 # GET /actions/search//song/{name}
@@ -111,19 +109,54 @@ def search_item():
 
     # search for song
     if search_type == "song":
-        data = cli.search_for_song(search_item)
+        try:
+            data = cli.search_for_song(search_item)
+        except:
+            cli.refresh_token()
+            data = cli.search_for_song(search_item)
         return render_template('songs.html', data=data)
     # search for artist
     else:
-        data = cli.search_for_artist(search_item)
+        try:
+            data = cli.search_for_artist(search_item)
+        except:
+            cli.refresh_token()
+            data = cli.search_for_artist(search_item)
         return render_template('top_artists.html', data=data)
 
 # GET /actions/search/artist/{name}
 @app.route('/actions/search/artist/<name>', methods=['GET'])
 def search_artist(name):
     global cli
-    data = cli.search_for_artist(name)
+    try:
+        data = cli.search_for_artist(name)
+    except:
+        cli.refresh_token()
+        data = cli.search_for_artist(name)
     return render_template('top_artists.html', data=data)
+
+# GET /actions/playlists
+@app.route('/actions/playlists', methods=['GET'])
+def my_playlists():
+    global cli
+    try:
+        data = cli.get_my_playlists()
+    except:
+        cli.refresh_token()
+        data = cli.get_my_playlists()
+    return render_template('playlists.html', data=data)
+
+# POST /actions/playlists
+@app.route('/actions/playlists', methods=['POST'])
+def playlist_songs():
+    global cli
+    playlist_id = request.form.get('playlist_id')
+    try:
+        data = cli.get_my_playlist_data(playlist_id)
+    except:
+        cli.refresh_token()
+        data = cli.get_my_playlist_data(playlist_id)
+    return render_template('songs.html', data=data)
 
 if __name__ == ' __main__':
     app.debug = True
