@@ -40,12 +40,9 @@
         <!-- Attribute averages -->
         <tr>
           <td><i>Averages</i></td>
+          <td></td>
           {% for attr, avg in data.attr_avgs.items() %}
-          {% if attr == "key" %}
-          <td><i>--</i></td>
-          {% else %}
           <td><i>{{avg}}</i></td>
-          {% endif %}
           {% endfor %}
         </tr>
         <!-- Table data -->
