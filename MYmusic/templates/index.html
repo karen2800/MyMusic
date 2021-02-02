@@ -5,7 +5,11 @@
   <div class="container">
 
     <!-- Logo -->
+    {% if data %}
+    <h1 id="logo">{{data.title}}</h1>
+    {% else %}
     <h1 id="logo">Welcome</h1>
+    {% endif %}
     
   <!-- Nav -->
   <nav id="nav">
@@ -20,4 +24,7 @@
 
   </div>
 </section>
+{% endblock %}
+
+{% block content %}
 {% endblock %}

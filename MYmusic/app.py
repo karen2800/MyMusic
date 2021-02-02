@@ -58,7 +58,8 @@ def actions():
 # GET /actions/search
 @app.route('/actions/search', methods=['GET'])
 def search():
-    return render_template('search.html')
+    data = { "title" : "Search"}
+    return render_template('search.html', data=data)
 
 # GET /actions/top_artists
 @app.route('/actions/top_artists', methods=['GET'])
