@@ -8,16 +8,16 @@
      
       <table>
         <tr>
-          <th style="min-width: 210px;"><h3><strong>Artist</strong></h3></th>
-          <th><h3><strong>Popularity</strong></h3></th>
-          <th><h3><strong>Genres</strong></h3></th>
+          <th class="artist"><h3><strong>Artist</strong></h3></th>
+          <th class="attr"><h3><strong>Popularity</strong></h3></th>
+          <th class="attr"><h3><strong>Genres</strong></h3></th>
           <th></th>
         </tr>
         {% for key, val in data.artists.items() %}
         <tr>
           <td><strong>{{val["artist"]}}</strong></td>
-          <td>{{val["popularity"]}}</td>
-          <td>{{val["genres"]}}</td>
+          <td class="attr">{{val["popularity"]}}</td>
+          <td class="attr">{{val["genres"]}}</td>
           <td>
             <form action="/actions/top_artists" method="post" class="actions">
               <input hidden id="artist_id" name="artist_id" value="{{key}}">
