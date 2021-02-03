@@ -9,15 +9,15 @@
       <table>
         <!-- Table header -->
         <tr>
-          <th style="width: 260px;"><h3><strong>Title</strong></h3></th>
-          <th style="width: 230px;"><h3><strong>Artist</strong></h3></th>
+          <th class="title"><h3><strong>Title</strong></h3></th>
+          <th class="artist"><h3><strong>Artist</strong></h3></th>
           {% for attr, avg in data.attr_avgs.items() %}
-          <th><h3><strong>{{attr}}</strong></h3></th>
+          <th class="attr"><h3><strong>{{attr}}</strong></h3></th>
           {% endfor %}
           <th><h3><strong>Save</strong></h3></th>
         </tr>
         <!-- Attribute averages -->
-        <tr>
+        <tr class="attr">
           <td><i>Averages</i></td>
           <td></td>
           {% for attr, avg in data.attr_avgs.items() %}
@@ -31,7 +31,7 @@
           <td>{{val["artist"]}}</td>
           {% if val.attributes %}
           {% for attr, num in val.attributes.items() %}
-          <td>{{num}}</td>
+          <td class="attr">{{num}}</td>
           {% endfor %}
           {% else %}
           <td></td>
