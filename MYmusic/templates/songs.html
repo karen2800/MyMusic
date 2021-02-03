@@ -5,15 +5,16 @@
   <!-- Excerpts -->
   <section>
     <ul class="divided">
-     
+     {% if data and data.attr_avgs %}
       <table>
         <!-- Table header -->
         <tr>
-          <th style="min-width: 210px;"><h3><strong>Title</strong></h3></th>
-          <th><h3><strong>Artist</strong></h3></th>
+          <th style="width: 260px;"><h3><strong>Title</strong></h3></th>
+          <th style="width: 230px;"><h3><strong>Artist</strong></h3></th>
           {% for attr, avg in data.attr_avgs.items() %}
           <th><h3><strong>{{attr}}</strong></h3></th>
           {% endfor %}
+          <th><h3><strong>Save</strong></h3></th>
         </tr>
         <!-- Attribute averages -->
         <tr>
@@ -32,12 +33,20 @@
           {% for attr, num in val.attributes.items() %}
           <td>{{num}}</td>
           {% endfor %}
+          {% else %}
+          <td></td>
           {% endif %}
+          <td>      
+            <li><a class="icon solid fa-heart" onclick="location.href='http:\/\/127.0.0.1:5000\/actions\/saved'" type="submit"></a></li>
+          </td>
         </tr>
         {% endfor %}
       </table>
 
     </ul>
+    {% else %}
+    <p>No songs</p>
+    {% endif %}
   </section>
 
 {% endblock %}

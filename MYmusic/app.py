@@ -55,6 +55,12 @@ def got_code(code):
 def actions():
     return render_template('index.html')
 
+# GET /actions/saved
+@app.route('/actions/saved', methods=['GET'])
+def saved_songs():
+    data = { "title" : "Saved Songs"}
+    return render_template('songs.html', data=data)
+
 # GET /actions/search
 @app.route('/actions/search', methods=['GET'])
 def search():

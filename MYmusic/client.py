@@ -11,8 +11,14 @@ class Client:
         self.client_secret = client_secret
         self.user_id = user_id
         self.token = None
-        self.new_playlist = Playlist()
-        self.current_playlist = Playlist()
+        self.saved_songs = Playlist()
+
+    # add songs to saved songs playlist
+    def add_to_saved_songs(self, songs):
+        # k: song id
+        # v: song { "artist" : "", "title": ""}
+        for k, v in songs:
+            self.saved_songs.songs.add_song(k, v)
 
     # get user playlists
     def get_my_playlists(self):
@@ -154,7 +160,7 @@ class Client:
         res_json = res.json()
 
         id_list = ids.split(",")
-        audio_features = ["valence", "tempo", "energy", "danceability", "acousticness", "key"]
+        audio_features = ["valence", "tempo", "energy", "acousticness", "key"]
         
         if len(id_list) > 0 and res_json["audio_features"] != None and len(res_json["audio_features"]) > 0:
             count = 0
