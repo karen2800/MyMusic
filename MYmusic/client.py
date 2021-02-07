@@ -11,14 +11,15 @@ class Client:
         self.client_secret = client_secret
         self.user_id = user_id
         self.token = None
-        self.saved_songs = Playlist()
+        self.saved_songs = Songs("Saved Songs")
 
-    # add songs to saved songs playlist
-    def add_to_saved_songs(self, songs):
-        # k: song id
-        # v: song { "artist" : "", "title": ""}
-        for k, v in songs:
-            self.saved_songs.songs.add_song(k, v)
+    # add song to saved songs playlist
+    def add_to_saved_songs(self, id, song):
+        self.saved_songs.add_song(id, song)
+        self.saved_songs = self.get_track_data(self.saved_songs.get_ids(), self.saved_songs)
+    # remove song from saved songs playlist
+    def remove_from_saved_songs(self, id):
+        self.saved_songs.remove_song(id)
 
     # get user playlists
     def get_my_playlists(self):

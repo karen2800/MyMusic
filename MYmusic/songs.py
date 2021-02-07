@@ -12,6 +12,14 @@ class Songs:
         self.songs[id] = song
     def remove_song(self, id):
         self.songs.pop(id)
+    def get_ids(self):
+        keys = ""
+        for k, v in self.songs.items():
+            keys += k + ","
+        return keys[:-1]
+    def get_id_list(self):
+        ids = self.get_ids().split(",")
+        return ids
 
     def add_attributes(self, id, attributes):
         self.songs[id]["attributes"] = attributes

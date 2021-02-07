@@ -58,8 +58,33 @@ def actions():
 # GET /actions/saved
 @app.route('/actions/saved', methods=['GET'])
 def saved_songs():
-    data = { "title" : "Saved Songs"}
-    return render_template('songs.html', data=data)
+    global cli
+    data = cli.saved_songs
+    saved = cli.saved_songs.get_id_list()
+    return render_template('songs.html', data=data, saved=saved)
+
+# GET /actions/saved
+@app.route('/actions/saved', methods=['POST'])
+def saved_songs_post():
+    global cli
+    song_id = request.form.get('song_id')
+    artist = request.form.get('artist')
+    title = request.form.get('title')
+
+    song = {
+        "artist" : artist,
+        "title" : title
+    }
+    url = request.form.get('url')
+
+    # add song
+    if cli.saved_songs.songs.get(song_id) is None:
+        cli.add_to_saved_songs(song_id, song)
+    # remove song
+    else:
+        cli.remove_from_saved_songs(song_id)
+
+    return redirect(url)
 
 # GET /actions/search
 @app.route('/actions/search', methods=['GET'])
@@ -87,7 +112,8 @@ def top_artist_songs():
 def my_top_songs():
     global cli
     data = cli.get_my_top_tracks()
-    return render_template('songs.html', data=data) 
+    saved = cli.saved_songs.get_id_list()
+    return render_template('songs.html', data=data, saved=saved) 
 
 # GET /actions/recent
 @app.route('/actions/recent', methods=['GET'])
@@ -98,14 +124,16 @@ def my_last_played_songs():
     except:
         cli.refresh_token()
         data = cli.get_last_played_tracks()
-    return render_template('songs.html', data=data)
+    saved = cli.saved_songs.get_id_list()
+    return render_template('songs.html', data=data, saved=saved)
 
 # GET /actions/search//song/{name}
 @app.route('/actions/search/song/<name>', methods=['GET'])
 def search_song(name):
     global cli
     data = cli.search_for_song(name)
-    return render_template('songs.html', data=data)
+    saved = cli.saved_songs.get_id_list()
+    return render_template('songs.html', data=data, saved=saved)
 
 # GET /actions/search
 @app.route('/actions/search', methods=['POST'])
@@ -121,7 +149,8 @@ def search_item():
         except:
             cli.refresh_token()
             data = cli.search_for_song(search_item)
-        return render_template('songs.html', data=data)
+        saved = cli.saved_songs.get_id_list()
+        return render_template('songs.html', data=data, saved=saved)
     # search for artist
     else:
         try:
@@ -163,7 +192,8 @@ def playlist_songs():
     except:
         cli.refresh_token()
         data = cli.get_my_playlist_data(playlist_id)
-    return render_template('songs.html', data=data)
+    saved = cli.saved_songs.get_id_list()
+    return render_template('songs.html', data=data, saved=saved)
 
 if __name__ == ' __main__':
     app.debug = True

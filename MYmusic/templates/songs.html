@@ -5,7 +5,7 @@
   <!-- Excerpts -->
   <section>
     <ul class="divided">
-     {% if data and data.attr_avgs %}
+     {% if data %}
       <table>
         <!-- Table header -->
         <tr>
@@ -17,13 +17,16 @@
           <th><h3><strong>Save</strong></h3></th>
         </tr>
         <!-- Attribute averages -->
+        {% if data.attr_avgs %}
         <tr class="attr">
           <td><i>Averages</i></td>
           <td></td>
+          
           {% for attr, avg in data.attr_avgs.items() %}
           <td><i>{{avg}}</i></td>
           {% endfor %}
         </tr>
+        {% endif %}
         <!-- Table data -->
         {% for key, val in data.songs.items() %}
         <tr>
@@ -37,7 +40,17 @@
           <td></td>
           {% endif %}
           <td>      
-            <li><a class="icon solid fa-heart" onclick="location.href='http:\/\/127.0.0.1:5000\/actions\/saved'" type="submit"></a></li>
+            <form action="/actions/saved" method="post" class="actions">
+              <input hidden id="song_id" name="song_id" value="{{key}}">
+              <input hidden id="artist" name="artist" value="{{val.artist}}">
+              <input hidden id="title" name="title" value="{{val.title}}">
+              <input hidden id="url" name="url" value="{{url_for(request.endpoint)}}">
+              {% if key in saved %}
+              <button id="heart" type="submit" class="icon fa-heart solid"></button>
+              {% else %}
+              <button id="heart" type="submit" class="icon fa-heart"></button>
+              {% endif %}
+            </form>
           </td>
         </tr>
         {% endfor %}
