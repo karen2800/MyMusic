@@ -39,18 +39,17 @@
           {% else %}
           <td></td>
           {% endif %}
-          <td>      
-            <form action="/actions/saved" method="post" class="actions">
-              <input hidden id="song_id" name="song_id" value="{{key}}">
-              <input hidden id="artist" name="artist" value="{{val.artist}}">
-              <input hidden id="title" name="title" value="{{val.title}}">
-              <input hidden id="url" name="url" value="{{url_for(request.endpoint)}}">
+          <!-- save button -->
+          <td>    
               {% if key in saved %}
-              <button id="heart" type="submit" class="icon fa-heart solid"></button>
+              <a id="heart_solid" song_id="{{key}}" artist="{{val.artist}}" title="{{val.title}}">
+                <div id="heart_solid{{key}}" class="icon fa-heart solid"></div>
+              </a>
               {% else %}
-              <button id="heart" type="submit" class="icon fa-heart"></button>
-              {% endif %}
-            </form>
+              <a id="heart" song_id="{{key}}" artist="{{val.artist}}" title="{{val.title}}">
+                <div id="heart{{key}}" class="icon fa-heart"></div>
+              </a>
+              {% endif %}  
           </td>
         </tr>
         {% endfor %}

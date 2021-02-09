@@ -63,9 +63,9 @@ def saved_songs():
     saved = cli.saved_songs.get_id_list()
     return render_template('songs.html', data=data, saved=saved)
 
-# GET /actions/saved
-@app.route('/actions/saved', methods=['POST'])
-def saved_songs_post():
+# POST /actions/saving
+@app.route('/actions/saving', methods=['POST'])
+def saved_songs_saving():
     global cli
     song_id = request.form.get('song_id')
     artist = request.form.get('artist')
@@ -75,16 +75,17 @@ def saved_songs_post():
         "artist" : artist,
         "title" : title
     }
-    url = request.form.get('url')
+    song_added = False
 
-    # add song
     if cli.saved_songs.songs.get(song_id) is None:
+        # add song
         cli.add_to_saved_songs(song_id, song)
-    # remove song
+        song_added = True
     else:
+        # remove song
         cli.remove_from_saved_songs(song_id)
 
-    return redirect(url)
+    return jsonify({'result' : 'success', 'song_added' : song_added })
 
 # GET /actions/search
 @app.route('/actions/search', methods=['GET'])
@@ -105,7 +106,8 @@ def top_artist_songs():
     global cli
     artist_id = request.form.get('artist_id')
     data = cli.get_artist_top_tracks(artist_id)
-    return render_template('songs.html', data=data)
+    saved = cli.saved_songs.get_id_list()
+    return render_template('songs.html', data=data, saved=saved)
 
 # GET /actions/top_songs
 @app.route('/actions/top_songs', methods=['GET'])

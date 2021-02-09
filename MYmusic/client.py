@@ -16,10 +16,13 @@ class Client:
     # add song to saved songs playlist
     def add_to_saved_songs(self, id, song):
         self.saved_songs.add_song(id, song)
+        self.saved_songs.clear_attributes()
         self.saved_songs = self.get_track_data(self.saved_songs.get_ids(), self.saved_songs)
     # remove song from saved songs playlist
     def remove_from_saved_songs(self, id):
         self.saved_songs.remove_song(id)
+        self.saved_songs.clear_attributes()
+        self.saved_songs = self.get_track_data(self.saved_songs.get_ids(), self.saved_songs)
 
     # get user playlists
     def get_my_playlists(self):

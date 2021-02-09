@@ -21,6 +21,9 @@ class Songs:
         ids = self.get_ids().split(",")
         return ids
 
+    def clear_attributes(self):
+        self.attributes = {}
+
     def add_attributes(self, id, attributes):
         self.songs[id]["attributes"] = attributes
         for k, v in attributes.items():
