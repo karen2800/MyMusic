@@ -11,19 +11,11 @@ global cli
 # getting started -- LOGIN
 @app.route('/', methods=['GET'])
 def main():
-    return render_template('connect.html')
-
-# POST /connect
-# try to connect
-@app.route('/connect', methods=['POST'])
-def connect():
-    # get information given by user
-    user_id = request.form.get('UserID')
     client_id = os.getenv('client_id') 
     client_secret = os.getenv('client_secret')
 
     global cli
-    cli = Client(client_id, client_secret, user_id)
+    cli = Client(client_id, client_secret)
     response = cli.get_code()
 
     return render_template('next.html', response=response)

@@ -6,10 +6,9 @@ from songs import Songs
 from artists import Artists
 
 class Client:
-    def __init__(self, client_id, client_secret, user_id):
+    def __init__(self, client_id, client_secret):
         self.client_id = client_id
         self.client_secret = client_secret
-        self.user_id = user_id
         self.token = None
         self.saved_songs = Songs("Saved Songs")
 
