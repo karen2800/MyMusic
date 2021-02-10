@@ -1,11 +1,21 @@
 {% extends 'index.html' %}
 
+{% block top %}
+{% if data.songs and data.title == "Saved Songs" %}
+<div>
+  <br>
+  <br>
+  <button>Add to Playlist</button>
+</div>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 
   <!-- Excerpts -->
   <section>
     <ul class="divided">
-     {% if data %}
+     {% if data.songs %}
       <table>
         <!-- Table header -->
         <tr>
@@ -54,11 +64,11 @@
         </tr>
         {% endfor %}
       </table>
-
+      {% else %}
+      <p>No songs</p>
+      {% endif %}
     </ul>
-    {% else %}
-    <p>No songs</p>
-    {% endif %}
+
   </section>
 
 {% endblock %}
