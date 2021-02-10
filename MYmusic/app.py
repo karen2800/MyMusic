@@ -19,8 +19,8 @@ def main():
 def connect():
     # get information given by user
     user_id = request.form.get('UserID')
-    client_id = request.form.get('ClientID')
-    client_secret = request.form.get('ClientSecret')
+    client_id = os.getenv('client_id') 
+    client_secret = os.getenv('client_secret')
 
     global cli
     cli = Client(client_id, client_secret, user_id)
