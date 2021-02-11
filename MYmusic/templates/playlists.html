@@ -3,7 +3,7 @@
 {% block content %}
 
   <!-- Excerpts -->
-  <div class="justify content center" style="padding-left: 30%;">
+  <div class="table-padding">
     <ul class="divided">
      
       <table>
@@ -15,7 +15,7 @@
         <tr>
           <td><strong>{{val["name"]}}</strong></td>
           <td>
-            <form action="/actions/playlists" method="post" class="actions">
+            <form action="/actions/playlist" method="post" class="actions">
               <input hidden id="playlist_id" name="playlist_id" value="{{key}}">
               <button type="submit" value="View Songs">View Songs</button>
             </form>
@@ -23,6 +23,32 @@
         </tr>
         {% endfor %}
       </table>
+
+      <br>
+      {% if (data.next) or (data.prev) %}
+
+      <div class="form-buttons">
+        <form action="/actions/playlists" method="post" class="actions form-button">
+          <input hidden id="playlist_url" name="playlist_url" value="{{data.prev}}">
+          {% if (data.prev) %}
+          <button type="submit" value="View Songs">Prev</button>
+          {% else %}
+          <button class="alt" disabled>Prev</button>
+          {% endif %}
+        </form>
+
+        <form action="/actions/playlists" method="post" class="actions form-button">
+          <input hidden id="playlist_url" name="playlist_url" value="{{data.next}}">
+          {% if (data.next) %}
+          <button type="submit" value="View Songs">Next</button>
+          {% else %}
+          <button class="alt" disabled>Next</button>
+          {% endif %}
+        </form>
+        
+      </div>
+
+      {% endif %}
 
     </ul>
   </div>

@@ -24,8 +24,9 @@ class Client:
         self.saved_songs = self.get_track_data(self.saved_songs.get_ids(), self.saved_songs)
 
     # get user playlists
-    def get_my_playlists(self):
-        url = "https://api.spotify.com/v1/me/playlists"
+    def get_my_playlists(self, url=None):
+        if url == None:
+            url = "https://api.spotify.com/v1/me/playlists"
         response = self.get_request(url)
         response_json = response.json()
 
@@ -33,6 +34,9 @@ class Client:
         for p in response_json["items"]:
             playlist = Playlist(p["name"], p["id"])
             playlists.add_playlist(p["id"], playlist)
+
+        playlists.next = response_json["next"]
+        playlists.prev = response_json["previous"]
 
         return playlists
 

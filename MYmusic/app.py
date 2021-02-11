@@ -166,18 +166,21 @@ def search_artist(name):
     return render_template('top_artists.html', data=data)
 
 # GET /actions/playlists
-@app.route('/actions/playlists', methods=['GET'])
+@app.route('/actions/playlists', methods=['GET', 'POST'])
 def my_playlists():
     global cli
+
+    url = request.form.get("playlist_url")
+
     try:
-        data = cli.get_my_playlists()
+        data = cli.get_my_playlists(url)
     except:
         cli.refresh_token()
-        data = cli.get_my_playlists()
+        data = cli.get_my_playlists(url)
     return render_template('playlists.html', data=data)
 
 # POST /actions/playlists
-@app.route('/actions/playlists', methods=['POST'])
+@app.route('/actions/playlist', methods=['POST'])
 def playlist_songs():
     global cli
     playlist_id = request.form.get('playlist_id')
