@@ -165,6 +165,21 @@ def search_artist(name):
         data = cli.search_for_artist(name)
     return render_template('top_artists.html', data=data)
 
+# GET playlists attribute averages
+@app.route('/actions/saved/playlists', methods=['GET', 'POST'])
+def playlists_attr_averages():
+    global cli
+
+    show_data = request.form.get('show_data')
+    data = cli.get_closest_playlists(show_data).playlists
+    top_songs = {}
+    for k, v in data.items():
+        top_songs[k] = { 'name' : v.name, 'attr' : v.songs.attr_avgs }
+
+    attributes = cli.saved_songs.attr_avgs
+
+    return jsonify({'result': 'success', 'data': top_songs, 'attr' : attributes})
+
 # GET /actions/playlists
 @app.route('/actions/playlists', methods=['GET', 'POST'])
 def my_playlists():

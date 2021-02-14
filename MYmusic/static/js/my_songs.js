@@ -1,6 +1,91 @@
 
 $(function() {
 
+    $('#add_to_playlist').on('click', function() {
+        // display loading
+        document.getElementById('add_to_playlist').innerHTML = 'loading...';
+        var show_data = document.getElementById('show_data').value;
+
+        // post request
+        req = $.ajax({
+            url : '/actions/saved/playlists',
+            type : 'POST',
+            data : { show_data : show_data }
+        });
+
+        req.done(function(data) {
+            // construct table
+            var mytable = "";
+            if (show_data != "True") {
+                mytable += "<div class='table-padding'>"
+            }
+            mytable += "<table><tr>";
+            mytable += "<th><h3><strong>Playlist Name</strong></h3></th>";
+
+            if (show_data == "True") {
+                mytable += "<th class='attr'><h3><strong>Valence</strong></h3></th>";
+                mytable += "<th class='attr'><h3><strong>Tempo</strong></h3></th>";
+                mytable += "<th class='attr'><h3><strong>Energy</strong></h3></th>";
+                mytable += "<th class='attr'><h3><strong>Acousticness</strong></h3></th>";
+                mytable += "<th class='attr'><h3><strong>Key</strong></h3></th></tr>";
+
+                var attributes = ['valence', 'tempo', 'energy', 'acousticness', 'key'];
+
+                // add attributes of saved songs
+                mytable += "<tr><td><i>Averages</i></td>"; 
+                for (var attr of attributes) {
+                    mytable += "<td class='attr'>" + data.attr[attr] + "</td>";
+                }
+                mytable += "</tr>";
+            }
+
+
+            // add playlist data to table
+            for (var p_id in data.data) {  
+                mytable += "<tr><td><strong>" + data.data[p_id]['name'] + "</strong></td>"; 
+
+                if (show_data == "True") {
+                    for (var attr of attributes) {
+                        var diff = data.attr[attr] - data.data[p_id]['attr'][attr];
+                        if (data.data[p_id]['attr'][attr] < data.attr[attr]) {
+                            if (diff <= 2) {
+                                mytable += "<td class='attr less-1'>" + data.data[p_id]['attr'][attr] + "</td>";
+                            }
+                            else if (diff <= 5) {
+                                mytable += "<td class='attr less-2'>" + data.data[p_id]['attr'][attr] + "</td>";
+                            }
+                            else {
+                                mytable += "<td class='attr less-3'>" + data.data[p_id]['attr'][attr] + "</td>";
+                            }
+                        } else {
+                            if (diff * -1 <= 2) {
+                                mytable += "<td class='attr greater-1'>" + data.data[p_id]['attr'][attr] + "</td>";
+                            }
+                            else if (diff * -1 <= 5) {
+                                mytable += "<td class='attr greater-2'>" + data.data[p_id]['attr'][attr] + "</td>";
+                            }
+                            else {
+                                mytable += "<td class='attr greater-3'>" + data.data[p_id]['attr'][attr] + "</td>";
+                            }
+                        }    
+                    }
+                }
+
+                mytable += "<td><button>Select</button></td>";
+                mytable += "</tr>";
+            }
+            mytable += "</table>";
+
+            if (show_data != "True") {
+                mytable += "</div>"
+            }
+
+            document.getElementById('add_to_playlist').innerHTML = 'Add to Existing Playlist';
+            document.getElementById('top_playlists').innerHTML = mytable;
+        });
+
+    });
+
     $('a#heart_solid').on('click', function() {
 
         // get song data

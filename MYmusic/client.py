@@ -4,6 +4,7 @@ from playlist import Playlist
 from playlists import Playlists
 from songs import Songs
 from artists import Artists
+import pandas as pd
 
 class Client:
     def __init__(self, client_id, client_secret):
@@ -23,10 +24,29 @@ class Client:
         self.saved_songs.clear_attributes()
         self.saved_songs = self.get_track_data(self.saved_songs.get_ids(), self.saved_songs)
 
+    # get closest playlists to avg given
+    def get_closest_playlists(self, calc_avgs=None):
+        playlists = self.get_my_playlists()
+
+        # get all playlists
+        while (playlists.next is not None):
+            data = self.get_my_playlists(playlists.next)
+            playlists.next = data.next
+            for p_id, p_val in data.playlists.items():
+                playlists.add_playlist(p_id, p_val)
+
+        # get tracks and calculate averages for each playlist
+        if ((calc_avgs is not None) and (calc_avgs != "False")):
+            for p_id, playlist in playlists.playlists.items():
+                playlist.songs = self.get_my_playlist_data(p_id)
+
+        return playlists
+        
+
     # get user playlists
     def get_my_playlists(self, url=None):
         if url == None:
-            url = "https://api.spotify.com/v1/me/playlists"
+            url = "https://api.spotify.com/v1/me/playlists?limit=50"
         response = self.get_request(url)
         response_json = response.json()
 
@@ -49,13 +69,15 @@ class Client:
         ids = ""
         tracks = Songs(response_json["name"])
         for track in response_json["tracks"]["items"]:
-            ids = ids + track["track"]["id"] + "," 
-            song = {
-                "artist" : track["track"]["artists"][0]["name"],
-                "title" : track["track"]["name"]
-            }
-            tracks.add_song(track["track"]["id"], song)
-
+            try:
+                ids = ids + track["track"]["id"] + "," 
+                song = {
+                    "artist" : track["track"]["artists"][0]["name"],
+                    "title" : track["track"]["name"]
+                }
+                tracks.add_song(track["track"]["id"], song)
+            except:
+                print("ERROR with track:", track['track']["name"])
         return self.get_track_data(ids[:-1], tracks)
 
     # search for artist

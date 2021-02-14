@@ -5,7 +5,12 @@
 <div>
   <br>
   <br>
-  <button>Add to Playlist</button>
+  <select id="show_data" name="show_data" type="radio" class="saved-page-buttons">
+    <option selected name="False" value="False">Hide Playlist Data</option>
+    <option name="True" value="True">Display Playlist Data</option>
+  </select>
+  <button id="add_to_playlist" class="saved-page-buttons">Add to Existing Playlist</button>
+  <button id="add_to_new_playlist" class="saved-page-buttons">Add to New Playlist</button>
 </div>
 {% endif %}
 {% endblock %}
@@ -14,6 +19,9 @@
 
   <!-- Excerpts -->
   <section>
+
+    <div id="top_playlists"></div>
+
     <ul class="divided">
      {% if data.songs %}
       <table>
